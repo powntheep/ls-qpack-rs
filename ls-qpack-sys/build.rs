@@ -49,6 +49,12 @@ fn main() {
     let builder;
 
     if target.contains("android") {
+        let include_target;
+        if target.contains("armv7") {
+            include_target = "arm-linux-androideabi".to_string();
+        } else {
+            include_target = target;
+        }
         let ndk_home = env::var("ANDROID_NDK_HOME").unwrap();
         builder = bindgen::Builder::default()
             .derive_debug(true)
@@ -64,7 +70,7 @@ fn main() {
             ))
             .clang_arg(format!(
                 "-I{}/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/{}",
-                ndk_home, target
+                ndk_home, include_target
             ))
             .header(
                 ls_qpack_dep_dir
